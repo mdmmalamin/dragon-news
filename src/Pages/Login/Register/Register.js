@@ -1,11 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const Register = () => {
-
-    const {createUser} = useContext(AuthContext);
+    const [error, setError] = useState('');
+    const [isAccepted, setAccepted] = useState(false);
+    const { createUser, userUpdateProfile } = useContext(AuthContext);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -20,11 +22,30 @@ const Register = () => {
         .then( result => {
             const user = result.user;
             console.log(user);
+            setError('');
             form.reset();
+            handleUpdateUserProfile(name, photoURL);
         })
-        .catch( e => console.error(e));
+        .catch( e => {
+            setError(e.message);
+            console.error(e);
+        });
     }
 
+    const handleUpdateUserProfile=(name, photoURL) => {
+        const profile = {
+            displayName: name,
+            photoURL: photoURL
+        }
+        userUpdateProfile(profile)
+        .then( () => {})
+        .catch( error => console.error(error));
+    }
+
+    const handleAccepted = event => {
+        setAccepted(event.target.checked);
+        // console.log(event.target.checked);
+    }
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -45,12 +66,18 @@ const Register = () => {
                 <Form.Label>Password</Form.Label>
                 <Form.Control name="password" type="password" placeholder="Password" required />
             </Form.Group>
-
-            <Button variant="primary" type="submit">
+            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                <Form.Check 
+                type="checkbox" 
+                onClick={handleAccepted} 
+                label={<>Accept <Link to='/t&c'>Trems And Conditions</Link></>} />
+            </Form.Group>
+            <Button variant="primary" type="submit" disabled={!isAccepted}>
                 Register
             </Button>
+            <br />
             <Form.Text className="text-danger">
-
+            {error}
             </Form.Text>
         </Form>
     );

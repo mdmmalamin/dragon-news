@@ -39,10 +39,10 @@ const Header = () => {
                     </Nav>
                     <Nav>
                         <Nav.Link href="/">
-                            {user?.uid ?
+                            {user?.uid?
                                 <>
-                                    <span>{user?.displayName}</span>
-                                    <Button variant='light' onClick={handleLogOut}>Logout</Button>
+                                    <span className='text-success me-3 fw-semibold'>{user?.displayName}</span>
+                                    <Button variant="warning" size='sm' onClick={handleLogOut}>Logout</Button>
                                 </>
                                 :
                                 <>
@@ -57,7 +57,7 @@ const Header = () => {
                                     roundedCircle
                                     className='me-2'
                                     src={user?.photoURL}
-                                    style={{height: '30px'}}
+                                    style={{height: '35px', width: '35px'}}
                                 ></Image>
                                 :
                                 <FaUserCircle></FaUserCircle>

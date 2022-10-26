@@ -6,7 +6,7 @@ import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import BrandCarousel from '../BrandCarousel/BrandCarousel';
 
 const RightSideNav = () => {
-    const { providerLogin } = useContext(AuthContext);
+    const { user, providerLogin } = useContext(AuthContext);
     const googleProvider = new GoogleAuthProvider()
     const handleGoogleSignIn = () => {
         providerLogin(googleProvider)
@@ -19,8 +19,15 @@ const RightSideNav = () => {
     return (
         <div>
             <ButtonGroup vertical>
-                <Button onClick={handleGoogleSignIn} className='mb-2' variant="outline-primary"><FaGoogle /> Login with Google</Button>
-                <Button variant="outline-dark"><FaGithub /> Login with Github</Button>
+                {user?.uid ?
+                    <></>
+                    :
+                    <>
+                        <Button onClick={handleGoogleSignIn} className='mb-2' variant="outline-primary"><FaGoogle /> Login with Google</Button>
+                        <Button variant="outline-dark"><FaGithub /> Login with Github</Button>
+                    </>
+                }
+                
             </ButtonGroup>
             <div className='mt-4'>
                 <h5>Find us on</h5>
