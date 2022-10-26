@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Container, Image, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { FaUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const Header = () => {
+    const {user, logOut} = useContext(AuthContext);
+    const handleLogOut = () => {
+        logOut()
+        .then( () => {})
+        .catch(error => console.error(error))
+    }
+
     const [Categories, setCategories] = useState([]);
 
     useEffect( () => {
@@ -29,8 +38,31 @@ const Header = () => {
                         </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Link href="#deets">More deets</Nav.Link>
-                        <Nav.Link eventKey={2} href="#memes">Dank memes</Nav.Link>
+                        <Nav.Link href="/">
+                            {user?.uid ?
+                                <>
+                                    <span>{user?.displayName}</span>
+                                    <Button variant='light' onClick={handleLogOut}>Logout</Button>
+                                </>
+                                :
+                                <>
+                                    <Link to='/login'>Login</Link>
+                                    <Link to='/register'>Register</Link>
+                                </>
+                            }
+                        </Nav.Link>
+                        <Nav.Link eventKey={2} href="/">
+                            {user?.photoURL ?
+                                <Image
+                                    roundedCircle
+                                    className='me-2'
+                                    src={user?.photoURL}
+                                    style={{height: '30px'}}
+                                ></Image>
+                                :
+                                <FaUserCircle></FaUserCircle>
+                            }
+                        </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
