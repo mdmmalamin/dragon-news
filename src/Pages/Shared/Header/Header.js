@@ -38,7 +38,7 @@ const Header = () => {
                         </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Link href="/">
+                        <>
                             {user?.uid?
                                 <>
                                     <span className='text-success me-3 fw-semibold'>{user?.displayName}</span>
@@ -50,19 +50,19 @@ const Header = () => {
                                     <Link to='/register'>Register</Link>
                                 </>
                             }
-                        </Nav.Link>
-                        <Nav.Link eventKey={2} href="/">
+                        </>
+                        <Link to='/profile'>
                             {user?.photoURL ?
                                 <Image
                                     roundedCircle
-                                    className='me-2'
+                                    className='ms-2'
                                     src={user?.photoURL}
                                     style={{height: '35px', width: '35px'}}
                                 ></Image>
                                 :
                                 <FaUserCircle></FaUserCircle>
                             }
-                        </Nav.Link>
+                        </Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

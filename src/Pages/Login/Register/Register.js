@@ -1,13 +1,16 @@
 import React, { useContext, useState } from 'react';
+import { Toast } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
+import toast from 'react-hot-toast';
+
 
 const Register = () => {
     const [error, setError] = useState('');
     const [isAccepted, setAccepted] = useState(false);
-    const { createUser, userUpdateProfile } = useContext(AuthContext);
+    const { createUser, userUpdateProfile, verifyEmail } = useContext(AuthContext);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -25,6 +28,8 @@ const Register = () => {
             setError('');
             form.reset();
             handleUpdateUserProfile(name, photoURL);
+            handleEmailVerification();
+            toast.success('Please Check your email address & verify.');
         })
         .catch( e => {
             setError(e.message);
@@ -42,6 +47,12 @@ const Register = () => {
         .catch( error => console.error(error));
     }
 
+    const handleEmailVerification = () => {
+        verifyEmail()
+        .then(() => {})
+        .catch(error => console.error(error))
+    }
+
     const handleAccepted = event => {
         setAccepted(event.target.checked);
         // console.log(event.target.checked);
@@ -54,7 +65,7 @@ const Register = () => {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Photo URL</Form.Label>
-                <Form.Control name="photoURL" type="text" placeholder="Phot URL" />
+                <Form.Control name="photoURL" type="text" placeholder="Photo URL" />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
